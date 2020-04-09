@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	  xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+
+
+<body>
+
+	<div class="row" th:fragment="layout-header">
+        <div class="col jumbotron jumbotronPersonal">
+            <div class="row container-fluid">
+                
+                <!-- Menu Mobile  -->
+                <div class="col-2" style="z-index: 2000;"  id="mini-menu">                	
+                    <nav class="navbar navbar-expand-lg navbar-light bg-light rounded menu-mini" >
+						<button 
+							class="navbar-toggler" 
+							type="button" 
+							data-toggle="collapse" 
+							data-target="#navbarSupportedContent" 
+							aria-controls="navbarSupportedContent" 
+							aria-expanded="false" 
+							aria-label="Toggle navigation">
+			    			<span class="navbar-toggler-icon"></span>
+			  			</button>
+						<div class="collapse navbar-collapse" id="navbarSupportedContent" >
+							<ul class="navbar-nav mr-auto"  id="navbarUL">
+							
+							<!-- 							
+								<li class="nav-item ">
+									<a class="nav-link"  th:href="@{/}">
+										<img class="icon" th:src="@{/img/icons/svg/home.svg}" alt="Home Page" />
+									</a>                                
+								</li>
+	 						-->
+	 
+								<li class="nav-item dropdown" sec:authorize="hasAnyRole('ROLE_JRMAT_DASHBOARD_2019', 'JRMAT_DASHBOARD_2019')">
+								  <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" th:text="#{menu.brightstar}"></a>
+								  <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+								    <a class="dropdown-item" th:href="@{/receive/init}" th:text="#{menu.brightstar.receive}"></a>
+								 <!--     <a class="dropdown-item" th:href="@{/receive/list}" th:text="#{menu.brightstar.consultMasterBox}"></a>-->
+								  </div>
+								</li>
+								
+								<li class="nav-item dropdown" sec:authorize="hasAnyRole('ROLE_JRMAT_DASHBOARD_2019', 'JRMAT_DASHBOARD_2019')">
+								  <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" th:text="#{menu.buyback}"></a>
+								  <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+								    <a class="dropdown-item" th:href="@{/purchase/init}" th:text="#{menu.buyback.purchase}"></a>
+								  </div>
+								</li>
+
+							</ul>
+                       </div>
+					</nav>			
+                </div>
+				
+				<!-- Title -->                
+                <div class="col-6" id="columnHeader">                	
+                    <h1 class="display-4" id="titleHeader">Plib mobi</h1>
+                </div>
+                
+                <!-- Options -->
+                <div class="col-4 logout-menu">                	
+                    <div class="btn-group ">
+                        <button class="btn btn-light btn-sm dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <span sec:authentication="principal.userNameReduced"></span>
+                        </button>
+                        <div class="dropdown-menu" style="z-index: 2000;">
+                                <a class="dropdown-item" th:href="@{/?lang=pt}" th:text="#{label.language.portuguese}"></a>
+                                <a class="dropdown-item" th:href="@{/?lang=en}" th:text="#{label.language.english}"></a>
+                                <a class="dropdown-item" th:href="@{/?lang=es}" th:text="#{label.language.spanish}"></a>
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item" th:href="@{/logout}" th:text="#{label.login.logout}" ></a>
+                        </div>                            
+                    </div>
+                </div>
+                
+            </div>  
+        </div>
+    </div>
+
+
+
+</body>
+
+</html>

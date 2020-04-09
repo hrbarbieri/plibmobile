@@ -1,0 +1,90 @@
+﻿<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+
+<head>
+	<meta charset="UTF-8"/>
+	<meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+	<meta name="viewport" content="width=device-width, initial-scale=1"/>
+	
+	<title>Brightstar - Portal de Logistica Inversa</title>
+	
+	
+	<link th:href="@{/webjars/bootstrap/4.3.1/css/bootstrap.min.css}" rel="stylesheet"/>
+	   
+	<link rel="stylesheet" th:href="@{/css/style.css}">
+	<link rel="stylesheet" th:href="@{/css/layout.css}">
+	  
+	<th:block layout:fragment="stylesheet-extra"></th:block>	
+	  
+	<link rel="shortcut icon" th:href="@{/img/favicon.png}" />
+
+</head>
+
+<body class="d-flex flex-column h-100">
+
+<div class="container-fluid  layout-url" th:attr="data-url-layout=@{/}">
+
+    <!-- HEADER -->
+    <div th:replace="layout/fragments/Header :: layout-header"></div>
+
+
+    <!-- MENU DEFAULT -->
+   <div th:replace="layout/fragments/MenuDefault :: layout-menuDefault"></div>
+
+   
+    <!-- CONTENT -->
+    <div class="row" >
+        <div class="col ">        
+        
+        	<!-- Alerts -->
+           	<div th:if="${messageSuccess != null}">
+            	<div class="alert alert-info" role="alert" th:utext="${messageSuccess}"></div>
+        	</div>
+        	
+        	<div th:if="${messageError != null}">
+            	<div class="alert alert-danger" role="alert" th:text="${messageError}"></div>
+        	</div>
+        	
+        	<div th:if="${exception != null}">
+            	<div class="alert alert-warning" role="alert" th:text="${exception}"></div>
+        	</div>
+        	
+        	<!-- title page -->
+			<div class="jumbotronTitle" style="margin-top:10px;border-radius: 5px 5px 0px 0px;padding: 0px 0px 0px 15px" th:text="${titlePage}" ></div>
+			
+			<!-- Content -->        	
+        	<div class="border" style="margin: 0px 0px 10px 0px;padding:10px 0px 0px 0px;border-radius: 0px 0px 7px 7px;">
+				<div class="container">
+				
+					<section layout:fragment="content"></section>
+					
+				</div>
+			</div>
+			
+        </div>
+    </div>
+
+    <!-- FOOTER -->
+    <div th:replace="layout/fragments/Footer :: layout-footer"></div>
+
+</div>
+
+	<script th:src="@{/webjars/jquery/3.3.1/jquery.min.js}"></script>
+	<script  th:src="@{/js/jquery/popper.min.js}"></script>
+	<script th:src="@{/webjars/bootstrap/4.3.1/js/bootstrap.min.js}"></script>
+	
+	<script th:src="@{/js/layout.js}"></script>		
+	
+	<!-- Angular / Module -->
+	<script th:src="@{/js/angular-1.6.9/angular.min.js}"></script>
+	
+	
+	<script th:src="@{/js/angular-1.6.9/app.module.js}"></script>
+	
+	<th:block layout:fragment="javascript-extra"></th:block>	
+
+
+</body>
+</html>

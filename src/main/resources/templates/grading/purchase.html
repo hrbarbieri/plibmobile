@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	  layout:decorate="~{layout/layout}" ng-app="app">
+	<head>
+		<meta charset="utf-8"/>
+		<meta name="viewport" content="width=device-width, user-scalable=no"/>
+
+		<title>Brightstar - Portal de Logistica Inversa</title>
+		
+		<th:block layout:fragment="stylesheet-extra">
+			<!-- SPECIFIC PURCHASE  -->
+			<link  th:href="@{/css/bootstrap-toggle/bootstrap-switch.min.css}" rel="stylesheet" />
+			
+			<style>
+				div.col-12 {
+					padding: 0px 0px 0px 0px;
+				}
+				
+				.modal-dialog {
+				  height: 80% !important;
+				  padding-top:20%;
+				}
+				
+				.new-model{
+					font-size: 14px;
+					font-weight: bold;
+				}
+				
+				.hr-one {
+					margin: 5px 0px 15px 0px;
+				}
+				
+				.hr-two {
+					margin: 10px 0px 10px 0px;
+				}
+				
+				.newModelCorrect {
+					margin-top:13px;
+				}
+				
+				.footer {
+				    padding-top: 5px;
+				    padding-bottom: 5px;
+				    margin-bottom: 10px;
+				}
+				
+				.btn-personal{
+					padding: 0px; 
+				}
+				
+				.switch-change {
+					min-width: 120px !important;
+				}
+				
+				kbd {
+					padding: .0rem .2rem;
+				    font-size: 95.5%;
+				    color: rgb(178,34,34);
+				    
+				    border:1px solid rgb(178,34,34);
+				    background-color:#fff;
+				    
+				    border-radius: .2rem;
+				    margin-left: 5px;
+				    
+				    font-family:sans-serif; 
+				    font-size: 14px;
+				    font-weight: bold;
+				}
+				
+				.messageModalAlert {
+					font-size: 12px;
+					overflow: scroll;
+					max-height:200px;
+				}
+			</style>
+			
+		</th:block>
+		
+	</head>
+    <body>
+    	<section  layout:fragment="content"  ng-controller="purchase">
+    	
+			<div class="container" >
+			
+			<form method="POST">
+				<input type="hidden" id="correctModelId" name="correctModelId" />
+				<input type="hidden" id="correctVoucher" name="correctVoucher" />
+				
+			
+				<div class="form-group">
+				
+					<!-- 1ª TELA - BUSCA POR SERIAL -->
+					<div class="row" ng-show="purchaseStep == '1'" >
+						<div class="col-12 ">
+						
+							<!-- IMEI -->
+							<div class="row mx-1 my-4">
+								<div class="input-group input-group-sm mb-3" >
+									<div class="input-group-prepend">
+									  <span class="input-group-text" id="inputGroup-sizing-sm" th:text="#{label.received.field.serial}" ></span>
+									</div>
+  									<input type="text" class="form-control" aria-describedby="inputGroup-sizing-sm" ng-model="currentSerial" ng-keypress="checkIfEnterKeyWasPressed($event)" id="serialNumber" ng-disabled="disabledAll">
+  									<div id="loadImei" style="display:none;">
+										<div class="spinner-border text-danger spinner-border-sm" role="status" style="margin: 10px 0px 0px 6px;">
+										  <span class="sr-only">Loading...</span>
+										</div>
+									</div>
+								</div>
+							</div>
+
+							<!-- Botoes -->
+							<div class="row">
+								<div class="col-12 text-center">
+									<button type="button" class="btn btn-danger btn-sm px-5 mx-1" ng-click="searchSerialNumber()" ng-disabled="disabledAll">
+										<span ng-show="disabledAll" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+										<span th:text="#{label.received.button.confirm}" ></span>
+									</button>
+								</div>
+							</div>
+						</div>
+					</div>
+					
+					
+					
+					<!-- 2ª TELA - AVALIAÇÃO -->					
+					<div class="row " ng-show="purchaseStep == '2'" style="font-size: 13px;">
+						 <div class="row-12 w-100 mb-2">
+						    <div class="col-12">
+						    	<div style="float:left;width: 50px;">Projeto:</div><div><strong>{{showLoaded.project}}</strong></div>
+						    	<div style="float:left;width: 50px;">IMEI:</div><div><strong>{{showLoaded.imei}}</strong></div>
+						    	<div class="actual-model">
+						    		<div style="float:left;width: 50px;">Modelo:</div><strong>{{showLoaded.model}}</strong>
+						    	</div>
+						    </div>
+    					</div>
+    					
+    					<div class="row-12 w-100" ><hr class="hr-one"></div>
+    					
+    					<div class="row-12 w-100">
+						    <div class="col-12">
+						      
+						      <div ng-repeat="question in questions">						      
+						      	<div class="row mb-1" ng-if="question.group == 'FUNCIONAL'">
+							      	<div class="col-8">
+							      		{{question.name}}
+							      		<!-- ICON para Sub Question -->
+							      		<span id="icon-more_{{question.checkId}}-{{question.id}}"  ng-if=" question.relCheck != null " class="invisible">
+											 <kbd ng-click="processAnswerMore(this)">+</kbd>
+                                        </span>
+							      	</div>
+							      	<div class="col-4">
+							      		<input type="checkbox" class="switch-change" id="{{question.checkId}}-{{question.id}}"  data-on-color="success" data-on-text="Sim" data-off-text="Não" data-label-width="1" data-handle-width="80" />
+							      	</div>
+						      	</div>
+						      </div>
+						      
+						      <div class="row-12 w-100" ><hr class="hr-two"></div>
+						      
+						      <div ng-repeat="question in questions">						      
+						      	<div class="row mb-1" ng-if="question.group == 'TELA'">
+							      	<div class="col-8">
+							      		{{question.name}}
+							      		<!-- ICON para Sub Question -->
+							      		<span id="icon-more_{{question.checkId}}-{{question.id}}" ng-if=" question.relCheck != null " class="invisible">
+								      		<kbd ng-click="processAnswerMore(this)">+</kbd>
+                                        </span>
+							      	</div>
+							      	<div class="col-4">
+							      		<input type="checkbox" class="switch-change" id="{{question.checkId}}-{{question.id}}"  data-on-color="success" data-on-text="Sim" data-off-text="Não" data-label-width="1" data-handle-width="80" />
+							      	</div>
+						      	</div>
+						      </div>
+						      
+						      <div class="row-12 w-100" ><hr class="hr-two"></div>
+						      
+						      <div ng-repeat="question in questions">						      
+						      	<div class="row mb-1" ng-if="question.group == 'CARCAÇA'">
+							      	<div class="col-8">
+							      		{{question.name}}
+							      		<!-- ICON para Sub Question -->
+							      		<span id="icon-more_{{question.checkId}}-{{question.id}}" ng-if=" question.relCheck != null " class="invisible">
+								      		<kbd ng-click="processAnswerMore(this)">+</kbd>
+                                        </span>
+							      	</div>
+							      	<div class="col-4">
+							      		<input type="checkbox" class="switch-change" id="{{question.checkId}}-{{question.id}}" data-on-color="success" data-on-text="Sim" data-off-text="Não"  data-label-width="1" data-handle-width="80" />
+							      	</div>
+						      	</div>
+						      </div>
+						      
+						    </div>
+    					</div>
+    					
+    					<div class="row-12 w-100"><hr class="hr-two"></div>
+    					
+    					<div class="row-12 w-100">
+						    <div class="col-12 ">
+						    	<div class="row">
+							      	<div class="col-8">
+										MODELO CORRETO ?
+							      	</div>
+							      	<div class="col-4">
+							      		<input type="checkbox" class="switch-change" id="model-correct" data-on-color="success" data-on-text="Sim" data-off-text="Não"   />
+							      	</div>
+						      	</div>
+						    </div>
+						    
+						    <div style="display: none;" class="newModelCorrect"> Novo Modelo: <span class="new-model"></span></div>
+    					</div>
+    					
+						<div class="row-12 w-100"><hr class="hr-two"></div>
+					</div>		
+					
+					
+					<div class="row mt-3 " ng-show="purchaseStep == '3'" >
+					
+						<div class="col-12 text-center" >
+							<h5>GRADE DE COMPRA</h5>
+						</div>
+						<div class="col-12 text-center mt-0 mb-3 pt-1" style="background-color:#EEEEEE; border-top:2px solid #CCCCCC;border-bottom:2px solid #CCCCCC;">
+							<h6>TIER: 1</h6>
+							<h6>UMJ730GDUMA26XBBB-AD</h6>
+						</div>
+						<div class="col-12 mb-3 mt-2" >
+							<label>Obs.:</label>
+							<textarea rows="1" cols="40" class="form-control" style="font-size:12px;"></textarea>
+						</div>
+					
+					</div>
+					
+					
+					
+					<!-- BOTOES -->
+					<div class="row">
+	   						<div class="col-sm-12 text-center" ng-show="purchaseStep == '2'">
+	   							<button type="button" class="btn btn-danger btn-sm btn-personal px-3 mr-2" onclick="location.reload()">Voltar</button>
+	   							<button type="button" class="btn btn-success btn-sm btn-personal  px-5 ml-2  js-validate-bb3">Validar</button>
+	   						</div>							
+	   						
+	   						<div class="col-sm-12 text-center" ng-show="purchaseStep == '3'">
+	   							<button type="button" class="btn btn-danger btn-sm px-4 mr-1 btn-personal js-validate-edit">Editar</button>
+	   							<button type="button" class="btn btn-success btn-sm px-4 ml-1 btn-personal">Salvar</button>
+	   						</div>
+	   					</div>		
+					
+				</div>
+				</form>
+			</div>
+			
+			
+			<div th:replace="modals/modal-model :: modelo"></div>
+			<div th:replace="modals/modal-alerts :: modal-alert"></div>
+			<div th:replace="modals/modal-sub-questions :: sub-questions"></div>
+			<div th:replace="modals/modal-alerts :: modal-load"></div>
+			
+		</section>
+		
+		
+		<th:block layout:fragment="javascript-extra">
+			<!-- SPECIFIC PURCHASE  -->
+		
+			<!-- Controllers -->
+			<script th:src="@{/js/purchase.controller.js}"></script>
+			
+			<script th:src="@{/js/model.controller.js}"></script>
+			
+			<script th:src="@{/js/bootstrap-toggle/bootstrap-switch.min.js}"></script>
+			
+			<script th:src="@{/js/purchase.js}"></script>
+			
+		</th:block>
+		
+    </body>
+</html>
+
+			

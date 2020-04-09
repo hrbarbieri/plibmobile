@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	  layout:decorate="~{layout}">
+	  
+	  
+<body>
+
+	
+<div class="modal fade" id="modal-modelo" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" th:fragment="modelo" >
+	<div class="modal-dialog" role="document" >
+		<div class="modal-content" ng-controller="findModel">
+			
+			<div class="modal-header">
+			  <h5 class="modal-title" id="exampleModalLabel">Defina novo modelo</h5>
+			  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+			    <span aria-hidden="true">&times;</span>
+			  </button>
+			</div>
+			
+			<div class="modal-body contentScope" >
+				<form>
+					<div class="form-group  input-group-sm">
+						<label for="recipient-name" class="col-form-label">Fabricante:</label>
+						<select class="form-control" id="currentCarrier" ng-disabled="carriers.length <= 0">
+							<option value="-1">Selecione um Fabricante</option>
+					  		<option ng-repeat="carrier in carriers" value="{{carrier.carrierId}}">{{carrier.carrierName}}</option>
+						</select>
+					</div>
+          
+			      	<div class="form-group">
+			      		<label for="message-text" class="col-form-label">Modelo:</label>
+						<div class="input-group input-group-sm mb-3" >
+							<select class="form-control" id="currentModel" ng-disabled="models.length <= 0">
+					 			<option value="-1">Selecione um Modelo</option>
+				          		<option ng-repeat="model in models" value="{{model.modelId}}">{{model.modelName}}</option>
+							</select>
+							<div id="loadModel" style="display:none;">
+								<div class="spinner-border text-danger spinner-border-sm" role="status" style="margin: 10px 0px 0px 6px;">
+									<span class="sr-only">Loading...</span>
+								</div>
+							</div>
+						</div>
+					</div>
+        		</form>
+      		</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-primary btnConfirm btn-sm" ng-click="defineCorrectModelId()"  >Confirmar</button>
+				<button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Close</button>
+			</div>
+		</div>
+	</div>
+</div>
+	
+
+</body>	  
+	  
+</html>

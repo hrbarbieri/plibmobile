@@ -1,0 +1,135 @@
+﻿<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	  layout:decorate="~{layout/layout}" ng-app="app">
+	<head>
+		<meta charset="utf-8"/>
+		<meta name="viewport" content="width=device-width, user-scalable=no"/>
+
+		<title>Brightstar - Portal de Logistica Inversa</title>
+		
+		<th:block layout:fragment="stylesheet-extra">
+		</th:block>
+		
+	</head>
+    <body>
+		<section layout:fragment="content" ng-controller="MainCtrl">
+			
+			<div class="container">
+				<div class="form-group">
+					<div class="row">
+						<div class="col-12 ">
+						
+							<form th:action="@{/receive/save}"  method="post" th:object="${receiveForm}">
+						  		<input type="hidden" th:field="*{serials}" >
+						  		<input type="hidden" th:field="*{type}" >
+						  		<input type="hidden" th:field="*{provider}" >
+							</form>
+						
+							<div class="row-12 ">
+								<!-- Quantidade de Registros -->
+								<div class="row-12 text-center">
+									<span th:text="#{label.received.text.allLoad}"></span>: {{ receiveds.length }}
+								</div>
+								  	
+								<!-- Tipo de recebimento -->
+								<div class="row my-3 ">
+									<div class="input-group input-group-sm">
+										<div class="input-group-prepend">
+										  <span class="input-group-text" id="inputGroup-sizing-sm" th:text="#{label.received.field.type}"></span>
+										</div>
+										<select class="form-control form-control-sm" id="withDamage" ng-disabled="receiveds.length > 0 || disabledAll" >
+										  <option value="true" th:text="#{label.received.field.withDamage}"></option>
+										  <option value="false" th:text="#{label.received.field.withoutDamage}"  selected="selected"></option>
+										</select>
+									</div>
+								</div>
+							</div>
+							
+							<div class="row-12 ">
+								<!-- INSERT / REMOVE -->
+								<div class="row my-3 ">
+									<div class="input-group input-group-sm mb-3">
+										<div class="input-group-prepend">
+										  <span class="input-group-text" id="inputGroup-sizing-sm" th:text="#{label.received.field.action}"></span>
+										</div>
+										<select class="form-control form-control-sm" id="action" ng-model="action" ng-disabled="receiveds.length <= 0 || disabledAll" onchange="javascript:$('#serialNumber').focus();">
+										  <option value="1" th:text="#{label.received.field.add}"></option>
+										  <option value="0" th:text="#{label.received.field.remover}"></option>
+										</select>
+									</div>
+								</div>
+							</div>
+							
+							<!-- IMEI -->
+							<div class="row my-1">
+								<div class="input-group input-group-sm mb-3" >
+									<div class="input-group-prepend">
+									  <span class="input-group-text" id="inputGroup-sizing-sm" th:text="#{label.received.field.serial}" ></span>
+									</div>
+  									<input type="text" class="form-control" aria-describedby="inputGroup-sizing-sm" ng-keypress="checkIfEnterKeyWasPressed($event)" id="serialNumber" ng-disabled="disabledAll">
+  									<div id="loadImei" style="display:none;">
+										<div class="spinner-border text-danger spinner-border-sm" role="status" style="margin: 10px 0px 0px 6px;">
+										  <span class="sr-only">Loading...</span>
+										</div>
+									</div>
+								</div>
+							</div>
+
+							<!-- Transportador -->							
+							<div class="row  my-2">
+								<div class="input-group input-group-sm mb-3">
+									<div class="input-group-prepend">
+									  <span class="input-group-text" id="inputGroup-sizing-sm" th:text="#{label.received.field.transporter}"></span>
+									</div>
+									<select class="form-control form-control-sm" ng-disabled="disabledAll" id="transport">
+										<option th:each="provider : ${providers}" th:value="${provider.providerId}" th:text="${provider.providerName}" ></option>
+									</select>
+								</div>
+							</div>
+							
+							<!-- Botoes -->
+							<div class="row">
+								<div class="col-12 text-center">
+									<button type="button" class="btn btn-danger btn-sm px-2 mx-1" ng-click="defineAlertQuestion(2)" ng-disabled="receiveds.length == 0 || disabledAll">
+										<span ng-show="disabledAll" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+										<span th:text="#{label.received.button.confirm}" ></span>
+									</button>
+									<button type="button" class="btn btn-secondary btn-sm px-2" th:text="#{label.received.button.cleanList}" ng-click="defineAlertQuestion(1)" ng-disabled="receiveds.length == 0  || disabledAll"></button>
+								</div>
+							</div>
+							
+							
+						</div>
+					</div>
+				</div>
+			</div>
+			
+
+			<div th:replace="modals/modal-alerts :: modal-alert"></div>
+			<div th:replace="modals/modal-alerts :: modal-question"></div>
+			<div th:replace="modals/modal-alerts :: modal-load"></div>
+			
+		</section>
+		
+		
+		<th:block layout:fragment="javascript-extra">
+			<!-- SPECIFIC RECEIVED -->
+			
+			<!-- Controllers -->
+			<script th:src="@{/js/receive.controller.js}"></script>
+			
+			<script>
+		
+				function submitReceive() {
+					$("form").first().submit();
+				}
+		
+			</script>
+		
+		</th:block>
+		
+    </body>
+</html>
+
+			

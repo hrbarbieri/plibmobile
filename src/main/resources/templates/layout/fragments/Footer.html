@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+
+
+
+<body>
+
+
+    <div class="row" th:fragment="layout-footer">
+        <div class="col jumbotron jumbotronPersonal footer" >
+            <div class="row justify-content-end">
+            	<div class="col-8" id="descFooter" th:text="#{label.plib.footer.text}"></div>
+                <div class="col-2" id="descVersion" th:text="#{label.plib.version}"></div>
+            </div>
+        </div>
+    </div>
+
+
+</body>
+
+</html>

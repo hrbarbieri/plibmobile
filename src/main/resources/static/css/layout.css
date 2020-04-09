@@ -1,0 +1,40 @@
+div.alert, .alert-info, .alert-danger{
+	padding: 3px 1px 3px 0px;
+	text-align: center;
+	margin-top: 10px; 
+	font-size: 13px;
+}
+        
+nav.navbar {
+	margin:5px 0px 0px 0px;
+	position: absolute;
+	padding: .2rem .4rem;
+}      
+  
+button.navbar-toggler {
+	height: 25px;
+	padding: 0px 0px 0px 0px;
+}
+  
+span.navbar-toggler-icon {
+	height: 20px;
+}
+  
+a#navbarDropdown.nav-link.dropdown-toggle {
+	font-size: 13px;
+}
+  
+div.row.container-fluid{
+	padding-left: 0px;
+	padding-right: 0px;
+}
+  
+div.dropdown-menu {
+	border-radius: 5px;
+	border: 0;
+	background-color:#FFFFFF;
+}
+  
+a#navbarDropdown.nav-link.dropdown-toggle {
+	padding-right: 20px;
+}  
